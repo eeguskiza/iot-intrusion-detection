@@ -34,8 +34,8 @@ python scripts/download_data.py
 ## Setup
 
 ```bash
-conda create -n iot-ids python=3.11 -y
-conda activate iot-ids
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 

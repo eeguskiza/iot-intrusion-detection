@@ -1,21 +1,21 @@
 """
-Download CICIoT2023 dataset from Kaggle.
-Requires: pip install kaggle + ~/.kaggle/kaggle.json configured.
+Download CICIoT2023 dataset from Kaggle using kagglehub.
+Requires: pip install kagglehub tqdm
 
-Alternatively, download manually from the Google Drive link in README.md
-and place the CSV files in data/.
+Downloads all CSV files and stores them in data/.
 """
 
-import os
-import subprocess
+import shutil
 import sys
 from pathlib import Path
 
+from tqdm import tqdm
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-KAGGLE_DATASET = "madhavmalhotra/unb-cic-iot-dataset-2023"
+KAGGLE_DATASET = "madhavmalhotra/unb-cic-iot-dataset"
 
 
-def download_kaggle():
+def download():
     DATA_DIR.mkdir(exist_ok=True)
 
     csv_files = list(DATA_DIR.glob("*.csv"))
@@ -23,21 +23,29 @@ def download_kaggle():
         print(f"[OK] Found {len(csv_files)} CSV files in {DATA_DIR}. Skipping download.")
         return
 
-    print(f"[INFO] Downloading {KAGGLE_DATASET} into {DATA_DIR} ...")
     try:
-        subprocess.run(
-            ["kaggle", "datasets", "download", "-d", KAGGLE_DATASET, "-p", str(DATA_DIR), "--unzip"],
-            check=True,
-        )
-        print("[OK] Download complete.")
-    except FileNotFoundError:
-        print("[ERROR] kaggle CLI not found. Install with: pip install kaggle")
-        print("        Then place your API token in ~/.kaggle/kaggle.json")
+        import kagglehub
+    except ImportError:
+        print("[ERROR] kagglehub not installed. Run: pip install kagglehub")
         sys.exit(1)
-    except subprocess.CalledProcessError as e:
-        print(f"[ERROR] Download failed: {e}")
+
+    print(f"[INFO] Downloading '{KAGGLE_DATASET}' via kagglehub ...")
+    cache_path = Path(kagglehub.dataset_download(KAGGLE_DATASET))
+    print(f"[INFO] Dataset cached at: {cache_path}")
+
+    # Find all CSVs in the cached download
+    cached_csvs = list(cache_path.rglob("*.csv"))
+    if not cached_csvs:
+        print("[ERROR] No CSV files found in downloaded dataset.")
         sys.exit(1)
+
+    print(f"[INFO] Copying {len(cached_csvs)} CSV files to {DATA_DIR} ...")
+    for src in tqdm(cached_csvs, desc="Copying", unit="file"):
+        dst = DATA_DIR / src.name
+        shutil.copy2(src, dst)
+
+    print(f"[OK] {len(cached_csvs)} CSV files ready in {DATA_DIR}")
 
 
 if __name__ == "__main__":
-    download_kaggle()
+    download()

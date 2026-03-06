@@ -1,4 +1,5 @@
 # Data
+data/*
 data/*.csv
 data/*.zip
 data/*.parquet
@@ -33,3 +34,4 @@ Thumbs.db
 models/
 *.pkl
 *.joblib
+iot/
