@@ -23,7 +23,7 @@ iot-intrusion-detection/
 
 ## Dataset
 
-Download the dataset from **[Google Drive (public link)](TODO_REPLACE_WITH_YOUR_LINK)** and place the CSV files in the `data/` directory.
+Download the dataset from **[Google Drive (public link)](https://drive.google.com/drive/folders/1MGxaiRKDMAt1TTeemXwLCGfygF-GjZE8?usp=sharing)** and place the CSV files in the `data/` directory.
 
 Alternatively, run the download script:
 
@@ -43,12 +43,13 @@ pip install -r requirements.txt
 
 | Notebook | Description |
 |---|---|
-| `01_data_processing.ipynb` | Data loading, EDA, missing values, scaling, feature selection |
-| `02_imbalance_analysis.ipynb` | Class imbalance analysis and mitigation strategies |
-| `03_model_comparison.ipynb` | Model training, Optuna tuning, ensemble methods |
-| `04_results_discussion.ipynb` | Final results, comparison tables, lessons learned |
+| `00_data_exploration.ipynb` | Pure EDA: class distribution, data quality, outliers, correlations |
+| `01_data_loading_sampling.ipynb` | Full load, stratified sampling, preprocessing, 70/15/15 split → parquet |
+| `02_imbalance_analysis.ipynb` | Imbalance analysis, SMOTE, undersampling, class_weight comparison |
+| `03_model_comparison.ipynb` | Ensemble methods (Bagging, Boosting, Stacking), Optuna HPT with MedianPruner |
+| `04_results_discussion.ipynb` | Comparison tables, confusion matrices, lessons learned |
 
 ## Tech Stack
 
 - Python 3.11, scikit-learn, XGBoost (GPU), imbalanced-learn, Optuna
-- Hardware: Ryzen 7 9800X3D, 64GB RAM, RTX 5070 Ti (16GB VRAM)
+- Hardware: Ryzen 7 9800X3D, 32GB RAM, RTX 5070 Ti (16GB VRAM)

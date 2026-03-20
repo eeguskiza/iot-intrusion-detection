@@ -35,3 +35,6 @@ models/
 *.pkl
 *.joblib
 iot/
+
+.claude/*
+.claude/
